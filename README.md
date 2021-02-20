@@ -1,2 +1,2 @@
-# teaching
-notebooks with teaching material
+# Teaching material
+Notebooks with didactic and teaching material
