@@ -12,9 +12,10 @@ Data Science and Artificial Intelligence program
 
 * [L02 - What can be forecasted](https://github.com/nepslor/teaching/blob/main/TimeSeriesForecasting/WhatCanBeForecasted.ipynb) - with R
     [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/nepslor/teaching/blob/main/TimeSeriesForecasting/WhatCanBeForecasted.ipynb)
-    * [L02 Ex - What can be forecasted](https://github.com/nepslor/teaching/blob/main/TimeSeriesForecasting/WhatCanBeForecasted_python_ex.ipynb) - with R
+    * [L02 Ex - What can be forecasted](https://github.com/nepslor/teaching/blob/main/TimeSeriesForecasting/WhatCanBeForecasted_python_ex.ipynb) 
     [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/nepslor/teaching/blob/main/TimeSeriesForecasting/WhatCanBeForecasted_python_ex.ipynb)
- 
+    * [L02 G - Benchmark models and bootstrap](https://github.com/nepslor/teaching/blob/main/TimeSeriesForecasting/Benchmark_models_and_bootstrap.ipynb)
+    [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/nepslor/teaching/blob/main/TimeSeriesForecasting/Benchmark_models_and_bootstrap.ipynb)
 * [L08 - TS models selection and validation](https://github.com/nepslor/teaching/blob/main/TimeSeriesForecasting/model_selection_and_validation.ipynb) - with R
     [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/nepslor/teaching/blob/main/TimeSeriesForecasting/model_selection_and_validation.ipynb)
 * [L09 - Decision under uncertainty - single step forecasts](https://github.com/nepslor/teaching/blob/main/TimeSeriesForecasting/decision_under_uncertainty.ipynb) - with R
