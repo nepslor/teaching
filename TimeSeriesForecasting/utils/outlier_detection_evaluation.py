@@ -21,6 +21,7 @@ def scores(outliers, ground_truth):
     f1 = 2/(1/precision + 1/recall)
     return precision, recall, f1
 
+
 def get_scores(solutions):
     scores_sol = {}
     for sol, c in zip(solutions, is_outlier.columns):
@@ -38,11 +39,16 @@ with open(path_1, 'rb') as f:
 scores_mil = get_scores([s.index for s in sol_1])
 
 
-
 # ------------------------------- ColomboWeyBerchtold ----------------------------------------------------------------
 
 solutions_2 = [pd.read_csv(join(sol_data_dir, n), index_col=0).index for n in ['outliers_1.csv', 'outliers_2.csv', 'outliers_3.csv']]
 scores_cwb = get_scores(solutions_2)
 
 
-pd.concat({'mil':scores_mil, 'cwb':scores_cwb}, axis=1)
+# ------------------------------- PalaGrigioniGubeli ----------------------------------------------------------------
+with open(join(sol_data_dir, 'PalaGrigioniGubeli.pk'), 'rb') as f:
+    solutions_3 = pk.load(f)
+scores_pgg = get_scores(solutions_3)
+
+
+res = pd.concat({'mil':scores_mil, 'cwb':scores_cwb, 'pgg':scores_pgg}, axis=1)
