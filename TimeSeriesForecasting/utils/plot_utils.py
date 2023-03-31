@@ -39,11 +39,11 @@ class SeabornFig2Grid():
     Move a seaborn FacetGrid or PairGrid to a GridSpec within a figure.
     """
 
-    def __init__(self, seaborngrid, figsize=(13, 8)):
+    def __init__(self, seaborngrid, labels, figsize=(13, 8)):
         fig = plt.figure(figsize=figsize)
         gs = gridspec.GridSpec(1, len(seaborngrid))
 
-        for sbg, s in zip(seaborngrid, gs):
+        for sbg, s, t in zip(seaborngrid, gs, labels):
             self.fig = fig
             self.sg = sbg
             self.subplot = s
@@ -53,6 +53,7 @@ class SeabornFig2Grid():
             elif isinstance(self.sg, sns.axisgrid.JointGrid):
                 self._movejointgrid()
             self._finalize()
+            sbg.ax_marg_x.set_title(t)
             plt.show()
         gs.tight_layout(fig)
 

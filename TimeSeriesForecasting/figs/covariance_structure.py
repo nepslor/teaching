@@ -10,8 +10,8 @@ from sklearn.covariance import GraphicalLasso, GraphicalLassoCV, ShrunkCovarianc
 from TimeSeriesForecasting.utils.plot_utils import SeabornFig2Grid
 
 estimation = 'shrunk'
-N = 5000
-n_scen = 5000
+N = 2000
+n_scen = 10000
 
 
 def get_pdf(x, q_vect=np.linspace(0, 1, 100)):
@@ -49,6 +49,19 @@ def sample_scenarios(n_scen, pdfs, c, q_vect=np.linspace(0, 1, 100)):
     return scenarios
 
 
+def sample_from_empirical_copula(x, n_scens, q_vect=np.linspace(0, 1, 100)):
+    x_struct = x[np.random.choice(len(x), n_scens), :]
+    pdfs = get_pdf(x, q_vect)
+    u = np.random.rand(n_scens, 2)
+    independent_samples = sample_scenarios(n_scens, pdfs, u, q_vect)
+    sorted_indep_samples = np.vstack([np.sort(s) for s in independent_samples.T]).T
+    ordered_stats = np.vstack([x_i.argsort().argsort() for x_i in x_struct.T]).T
+    samples = np.zeros((n_scens, 2))
+    for i in range(x.shape[1]):
+        samples[:, i] = sorted_indep_samples[ordered_stats[:, i], i]
+    return samples
+
+
 # generate correlated signals
 z = np.random.randn(int(N), 1) + 1.6
 x1 = z
@@ -62,7 +75,7 @@ scens = sample_scenarios(n_scen, pdfs, c)
 g1 = joinplot(x)
 g2 = joinplot(c)
 g3 = joinplot(scens)
-SeabornFig2Grid([g1, g2, g3], figsize=(15, 5))
+SeabornFig2Grid([g1, g2, g3], ['observations', 'copula', 'sampled, Gaussian-copula'], figsize=(15, 5))
 plt.savefig('TimeSeriesForecasting/figs/covariance_structure_unimodal.png', dpi=300)
 
 z = np.vstack([np.random.randn(int(N/2), 1) + 1.6,  np.random.randn(int(N/2), 1)*0.8 + 6])
@@ -77,5 +90,12 @@ scens = sample_scenarios(n_scen, pdfs, c)
 g1 = joinplot(x)
 g2 = joinplot(c)
 g3 = joinplot(scens)
-SeabornFig2Grid([g1, g2, g3], figsize=(15, 5))
+SeabornFig2Grid([g1, g2, g3], ['observations', 'copula', 'sampled, Gaussian-copula'],  figsize=(15, 5))
 plt.savefig('TimeSeriesForecasting/figs/covariance_structure_bimodal.png', dpi=300)
+
+
+g1 = joinplot(x)
+g2 = joinplot(sample_scenarios(n_scen, pdfs, c))
+g3 = joinplot(sample_from_empirical_copula(x, n_scen))
+SeabornFig2Grid([g1, g2, g3], ['observations', 'sampled, Gaussian-copula', 'sampled, empirical-copula'], figsize=(15, 5))
+plt.savefig('TimeSeriesForecasting/figs/covariance_structure_bimodal_empirical_vs_gaussian.png', dpi=300)
