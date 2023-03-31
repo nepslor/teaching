@@ -24,8 +24,8 @@ def joinplot(x, q_vect=np.linspace(0, 1, 100)):
     g1 = sb.jointplot(x=x1.ravel(), y=x2.ravel(), marker=".", s=10,
                  marginal_kws=dict(bins=25, fill=False))
 
-    g1.ax_marg_x.plot(pdfs[:, 0], q_vect*N/20)
-    g1.ax_marg_y.plot(q_vect*N/20, pdfs[:, 1])
+    g1.ax_marg_x.plot(pdfs[:, 0], q_vect*len(x)/10)
+    g1.ax_marg_y.plot(q_vect*len(x)/10, pdfs[:, 1])
     return g1
 
 
