@@ -99,3 +99,42 @@ g2 = joinplot(sample_scenarios(n_scen, pdfs, c))
 g3 = joinplot(sample_from_empirical_copula(x, n_scen))
 SeabornFig2Grid([g1, g2, g3], ['observations', 'sampled, Gaussian-copula', 'sampled, empirical-copula'], figsize=(15, 5))
 plt.savefig('TimeSeriesForecasting/figs/covariance_structure_bimodal_empirical_vs_gaussian.png', dpi=300)
+
+
+
+N = 50000
+q_vect = np.linspace(0, 1, 100)
+samples = np.random.randn(N)
+quantiles = np.quantile(samples, q_vect)
+
+# plot ECDF
+
+n_trials = 1000
+u_samples = np.random.rand(n_trials)
+from scipy.interpolate import interp1d
+inv_ecdf = interp1d(q_vect, quantiles, fill_value='extrapolate')
+x_samples = inv_ecdf(u_samples)
+
+fig, ax = plt.subplots(1, 1, figsize=(6.5, 4))
+ax.plot(quantiles, q_vect)
+ax.hist(samples, bins=100, density=True, alpha=0.3, color='purple')
+# remove upper and right spines from the axis
+ax.spines['right'].set_visible(False)
+ax.spines['top'].set_visible(False)
+x_left, x_right = ax.get_xlim()
+z = 0
+for i in range(n_trials):
+    x, y = x_samples[i], u_samples[i]
+    for j in range(4):
+        z += 1
+        ax.hlines(y, x_left, x, color='r', alpha=j/6)
+        ax.vlines(x, 0, y, color='r', alpha=j/6)
+        ax.set_xlim(x_left, x_right)
+        plt.savefig('TimeSeriesForecasting/figs/inverse_sampling/{:04}.png'.format(z), dpi=150)
+        plt.pause(0.001)
+    ax.cla()
+    ax.vlines(x_samples[:i+1], 0, 0.05, color='r', alpha=0.1)
+    ax.plot(quantiles, q_vect)
+    ax.hist(samples, bins=100, density=True, alpha=0.3, color='purple')
+
+plt.close()
