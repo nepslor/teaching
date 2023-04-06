@@ -1,9 +1,12 @@
 # Time series, Analytics and Forecasting 
 This repo contains the interactive lessons for the course **Time series, Analytics and Forecasting** for the 
 Data Science and Artificial Intelligence program
+
 [Course syllabus](https://pond-philosophy-94e.notion.site/Time-series-Analytics-and-Forecasting-Course-Presentation-b5c6bff535844597b82d7b77ef02626b)
+
 [L01 Introduction](https://pond-philosophy-94e.notion.site/What-can-be-forecasted-introduction-78581288daf84b84855aee05afcc20f9)
-* [L01 Time Series Graphics](https://pond-philosophy-94e.notion.site/Time-series-graphics-c06b23af9c0d432c973b2bd5aa094763)
+
+[L01 Time Series Graphics](https://pond-philosophy-94e.notion.site/Time-series-graphics-c06b23af9c0d432c973b2bd5aa094763)
 * Ex01 Time Series Graphics - R [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/nepslor/teaching/blob/main/TimeSeriesForecasting/time_series_graphics_R.ipynb)
 * Ex01 Exploratory analysis - R [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/nepslor/teaching/blob/main/TimeSeriesForecasting/TS_visualization_R.ipynb)
 * Ex01 Exploratory analyis - Python [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/nepslor/teaching/blob/main/TimeSeriesForecasting/TS_visualization_python.ipynb)
