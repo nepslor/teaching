@@ -66,6 +66,12 @@ df_c1.drop(["Year", "Month", "Day"], axis=1, inplace=True)
 df_c1.set_index('Date', inplace=True, drop=True)
 len(df_c1.Location.unique())
 
+lagged_mav = lambda x, k: x.copy().rolling('{}d'.format(k)).mean()
+
+df_c1.loc[df_c1['Location']=='NewYork', 'Revenue'].plot()
+lagged_mav(df_c1.loc[df_c1['Location']=='NewYork', 'Revenue'], 30).plot()
+lagged_mav(df_c1.loc[df_c1['Location']=='NewYork', 'Revenue'], 60).plot()
+
 fig, ax = plt.subplots(1, 1, figsize=figsize)
 sb.lineplot(data=df_c1, x=df_c1.index, y="Revenue", hue="Location", ax=ax, alpha=0.8)
 plt.savefig(join(save_folder, 'hotels.png'))
