@@ -65,6 +65,28 @@ plt.gca().set_title('negative energy flows')
 plt.gca().legend(fontsize=5, ncol=2)
 plt.savefig('TimeSeriesForecasting/figs/lic_2.png', dpi=200)
 
+meter_epos = meters.loc[:, (meters.columns.get_level_values(0).isin(np.arange(20))) & (meters.columns.get_level_values(1)=='e_pos')].sum(axis=1)
+meter_eneg =meters.loc[:, (meters.columns.get_level_values(0).isin(np.arange(20))) & (meters.columns.get_level_values(1)=='e_neg')].sum(axis=1)
+pcc_epos = meters.loc[:, (meters.columns.get_level_values(0) == 'PCC') & (meters.columns.get_level_values(1)=='e_pos')].sum(axis=1)
+pcc_eneg = meters.loc[:, (meters.columns.get_level_values(0) == 'PCC') & (meters.columns.get_level_values(1)=='e_neg')].sum(axis=1)
+p_batt_neg = meters.loc[:, (meters.columns.get_level_values(0) == 'battery') & (meters.columns.get_level_values(1)=='e_neg')].sum(axis=1)
+p_batt_pos = meters.loc[:, (meters.columns.get_level_values(0) == 'battery') & (meters.columns.get_level_values(1)=='e_pos')].sum(axis=1)
+
+
+fig, ax = plt.subplots(1, 1, figsize=(15, 4))
+(meter_epos-meter_eneg).plot(alpha=0.6, ax=ax)
+(pcc_epos-pcc_eneg).plot(alpha=0.6, ax=ax)
+(p_batt_pos-p_batt_neg).plot(alpha=0.6, ax=ax)
+
+
+# check meters 10, 11, 15
+meters.loc[:, (meters.columns.get_level_values(0).isin(np.arange(20))) & (meters.columns.get_level_values(1)=='e_pos')][[10]].plot(alpha=0.6)
+meters.loc[:, (meters.columns.get_level_values(0).isin(np.arange(20))) & (meters.columns.get_level_values(1)=='e_pos')][[11]].plot(alpha=0.6)
+
+
+p_tot = -meters.loc[:, (meters.columns.get_level_values(0).isin(np.arange(20))) & (meters.columns.get_level_values(1)=='e_pos')][[14]].values + meters.loc[:, (meters.columns.get_level_values(0).isin(np.arange(20))) & (meters.columns.get_level_values(1)=='e_neg')][[14]]
+p_tot.plot()
+
 # keep only e_pos e_neg
 meters.to_pickle(join(data_path, 'lic_meters.zip'))
 
@@ -75,10 +97,10 @@ from influxdb import DataFrameClient
 import pickle as pk
 from tqdm import tqdm
 
-db_pars = {"host": "",
+db_pars = {"host": "isaac-db01.dacd.supsi.ch",
            "port": 443,
            "user": "forecast_meteoblue_ro",
-           "password": "",
+           "password": "ootohv3Saequaiji",
            "db": "forecast_meteoblue",
            "ssl": True,
            }

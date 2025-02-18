@@ -58,6 +58,11 @@ df_air.to_pickle(join(save_folder, 'air.pk'))
 df_air.iloc[:10, :].to_markdown()
 
 
+pm10 = df_air.loc[df_air['station']=='Shunyi'][['PM10']]
+pm10['hour'] = pm10.index.hour
+pm10.reset_index(drop=True, inplace=True)
+pm10_wide_format_day = pm10.pivot(columns='hour', values='PM10')
+
 # ------------------------------- HOTELS  -----------------------------------------------
 # FROM https://github.com/ashfarhangi/COVID-19
 
