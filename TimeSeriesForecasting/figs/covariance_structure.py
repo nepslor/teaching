@@ -68,6 +68,8 @@ x1 = z
 x2 = np.log(z+10) + 0.1*np.random.randn(N, 1)
 x = np.hstack([x1, x2])
 
+joinplot(sample_from_empirical_copula(x, n_scen))
+
 c = multivariate_normal_copula(x)
 pdfs = get_pdf(x)
 scens = sample_scenarios(n_scen, pdfs, c)
