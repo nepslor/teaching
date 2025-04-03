@@ -105,13 +105,19 @@ df_traffic.loc[:, df_traffic.dtypes.isin(['float64', 'int64', 'int'])].plot()
 dat = wget.download('https://storage.googleapis.com/tensorflow/tf-keras-datasets/jena_climate_2009_2016.csv.zip', out=save_folder)
 with zipfile.ZipFile(dat, 'r') as zip_ref:
     zip_ref.extractall(save_folder)
-df_weather = pd.read_csv(dat[:-4], parse_dates=True, index_col='Date Time')
+
+from datetime import datetime
+
+# Custom date parser
+dateparse = lambda x: datetime.strptime(x, '%d.%m.%Y %H:%M:%S')
+
+df_weather = pd.read_csv(dat[:-8], parse_dates=['Date Time'], index_col='Date Time', date_parser=dateparse)
 df_weather = df_weather.resample('1h').mean()
-df_weather.to_pickle(join(save_folder, 'weather.pk'))
+df_weather.to_pickle(join(save_folder, 'weather_correct.pk'))
 
 fig, ax = plt.subplots(1, 1, figsize=figsize)
 ((df_weather-df_weather.mean())/df_weather.std()).iloc[:1000, :].plot(ax=ax, alpha=0.2)
 ((df_weather['T (degC)']-df_weather['T (degC)'].mean())/df_weather['T (degC)'].std()).iloc[:1000].plot(color='orange')
-fig.savefig(join(save_folder, 'weather.png'))
+fig.savefig(join(save_folder, 'weather_correct.png'))
 
 df_weather.head().to_markdown()

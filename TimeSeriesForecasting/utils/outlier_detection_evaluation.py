@@ -23,9 +23,10 @@ def scores(outliers, ground_truth):
 
 
 def get_scores(solutions):
+    is_outlier_c = is_outlier.copy()
     scores_sol = {}
-    for sol, c in zip(solutions, is_outlier.columns):
-        precision, recall, f1 = scores(sol, is_outlier.index[is_outlier[c] == 1])
+    for sol, c in zip(solutions, is_outlier_c.columns):
+        precision, recall, f1 = scores(sol, is_outlier_c.index[is_outlier[c] == 1])
         scores_sol[c] = pd.DataFrame({'precision': precision, 'recall': recall, 'f1': f1}, index=[0])
     scores_sol = pd.concat(scores_sol, axis=0)
     return scores_sol
@@ -35,7 +36,7 @@ def plot_solutions(df, solutions, title):
     for i, s in enumerate(solutions):
         df.iloc[:, i].plot(ax=ax[i])
         ax[i].plot(s, df.iloc[:, i].iloc[s], 'r.')
-    plt.suptitle(title)
+    plt.suptitle(title, x=0.01, horizontalalignment='left')
 
 # ------------------------------- MargniIppolitoLoddo ----------------------------------------------------------------
 path_1 = join(sol_data_dir, 'MargniIppolitoLoddo.pk')
@@ -138,3 +139,60 @@ plt.hlines(1, *plt.gca().get_xlim(), linewidth=1, color='red', linestyle='--')
 plt.gca().spines[['top', 'right']].set_visible(False)
 plt.savefig('TimeSeriesForecasting/figs/out_5.png')
 plt.close('all')
+
+
+
+
+# --------------------------------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------------------------
+# ------------------------------- 2025 -------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------------------------
+from glob import glob
+new_sol_data_dir = '/home/lorenzo/Documents/Teaching/outliers_groupworks/2025/'
+solutions_paths = glob(join(new_sol_data_dir, '*'))
+
+def df_to_list(df):
+    return [df[c].dropna().astype(int).values for c in df.columns]
+
+sols = {}
+for s in solutions_paths:
+    extension = s.split('.')[-1]
+    if extension == 'csv':
+        df = pd.read_csv(s)
+    elif extension == 'pkl':
+        res = pd.read_pickle(s)
+        if isinstance(res, pd.DataFrame):
+            df = pd.concat(res, axis=1)
+        else:
+            df = pd.concat([pd.Series(s) for s in res], axis=1)
+    elif extension == 'json':
+        df = pd.read_json(s)
+    if df.shape[0]<df.shape[1]:
+        df = df.T
+    df.columns = [0, 1, 2]
+    solutions = df_to_list(df)
+    print(s.split('/')[-1])
+    print([s.sum() for s in solutions])
+    sols[(s.split('/')[-1]).split('.')[0]] = solutions
+
+fig, ax = plt.subplots(3, 1, figsize=(20, 5), layout='tight')
+for i in range(3):
+    pd.concat([pd.Series(v[i], name=k).astype(int) for k, v in sols.items()], axis=1).plot(ax=ax[i])
+
+sols_2023 = {'pala_grigioni_gubeli':solutions_pala, 'lorenzlorenz':my_solution}
+sols_all = {**(sols_2023), **sols}
+
+fig, ax = plt.subplots(3, 1, figsize=(20, 5))
+for i in range(3):
+    pd.concat([pd.Series(v[i], name=k).astype(int) for k, v in sols_all.items()], axis=1).plot(ax=ax[i])
+
+scores_f1 = pd.concat({k:get_scores(v)['f1'] for k, v in sols_all.items()}, axis=1)
+scores_f1['best_2024'] = res_2024['Acquistapace']
+scores_f1.mean().sort_values().plot(kind='bar', figsize=(8, 4), rot=0)
+plt.semilogy()
+plt.show()
+
+for k, v in sols.items():
+    plot_solutions(data, v, 'scores_3, f1: t0={:0.2f}, t1={:0.2f}, t2={:0.2f}, {}'.format(*scores_f1[k].values, k.upper()))
+    plt.savefig('TimeSeriesForecasting/figs/outliers_2025/{}.png'.format(k))
